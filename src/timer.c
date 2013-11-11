@@ -1,11 +1,3 @@
-/**
- *  we can't use CLOCK_MONOTONIC,
- *  let's make our own timer_t struct that additionally stores the last time difference
- *  between the timer and the REALTIME clock, and have timer_complete always check that
- *  this difference is always decrementing. If not, reset the timer or repeat the last
- *  remaining time.  
- */
-
 #include "timer.h"
 
 timer_t timer_get()
