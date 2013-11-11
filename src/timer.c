@@ -1,3 +1,11 @@
+/**
+ *  we can't use CLOCK_MONOTONIC,
+ *  let's make our own timer_t struct that additionally stores the last time difference
+ *  between the timer and the REALTIME clock, and have timer_complete always check that
+ *  this difference is always decrementing. If not, reset the timer or repeat the last
+ *  remaining time.  
+ */
+
 #include "timer.h"
 
 timer_t timer_get()
@@ -17,10 +25,9 @@ timer_t timer_get()
 
 	// create timer
     sev.sigev_notify = SIGEV_NONE;
-    sev.sigev_signo = SIGCONT;
-    sev.sigev_value.sival_ptr = &timer;
 
-	 if (timer_create(CLOCK_MONOTONIC, &sev, &timer) == -1) {
+//	 if (timer_create(CLOCK_MONOTONIC, &sev, &timer) == -1) {
+	 if (timer_create(CLOCK_REALTIME, &sev, &timer) == -1) {
 		perror("Could not create timer\n");
 		exit(EXIT_FAILURE);
 	 }
