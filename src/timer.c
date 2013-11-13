@@ -20,7 +20,7 @@ timer_t timer_get()
 
 //	 if (timer_create(CLOCK_MONOTONIC, &sev, &timer) == -1) {
 	 if (timer_create(CLOCK_REALTIME, &sev, &timer) == -1) {
-		perror("Could not create timer\n");
+		perror("\nCould not create timer\n");
 		exit(EXIT_FAILURE);
 	 }
 
@@ -30,7 +30,7 @@ timer_t timer_get()
 
 void timer_start(timer_t * timer, time_t timeout)
 {
-	printf("timer starting\n");
+	printf("\ntimer %d starting with timeout %d\n", *timer, timeout);
     struct itimerspec it_val;
     it_val.it_value.tv_sec = timeout;
     it_val.it_value.tv_nsec = 0;
@@ -40,7 +40,7 @@ void timer_start(timer_t * timer, time_t timeout)
     it_val.it_interval.tv_nsec = 0;
 
 	 if (timer_settime(*timer, 0, &it_val, NULL) == -1) {
-			perror("Could not start timer\n");
+			perror("\nCould not start timer\n");
 			exit(EXIT_FAILURE);
 	 }
 }
@@ -50,12 +50,14 @@ bool timer_complete(timer_t * timer)
 {
 	struct itimerspec curr_val;
 	if(timer_gettime(*timer, &curr_val) == -1) {
-		perror("Could not create timer\n");
+		perror("\nCould not create timer\n");
 		exit(EXIT_FAILURE);
 	}
 
-	if(curr_val.it_value.tv_sec == 0)
+	if(curr_val.it_value.tv_sec == 0) {
+		printf("\nTimer %d Complete!\n", *timer);
 		return true;
+	}
 	else
 		return false;
 }
