@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
 
 void timer_start(timer_t * timer, time_t timeout)
 {
-	printf("\ntimer %d starting with timeout\n", (int)*timer, (int)timeout);
+	printf("\ntimer %d starting with timeout %d\n", (int)*timer, (int)timeout);
     struct itimerspec it_val;
     it_val.it_value.tv_sec = timeout;
     it_val.it_value.tv_nsec = 0;
