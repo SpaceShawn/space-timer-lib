@@ -21,7 +21,7 @@ timer_t timer_get();
 // The timer will expire at the given timeout value
 // Entering a timeout of 0 will disarm the timer
 // The function resets the time when it is called to the timeout value
-void timer_start(timer_t * timerid, uint32_t timeout);
+void timer_start(timer_t * timerid, time_t timeout);
 
 // Returns true if the timer has expired
 bool timer_complete(timer_t * timer);
@@ -48,9 +48,9 @@ int main(int argc, char* argv[]) {
 	return EXIT_SUCCESS;
 }
 
-void timer_start(timer_t * timer, uint32_t timeout)
+void timer_start(timer_t * timer, time_t timeout)
 {
-	printf("timer starting\n");
+	printf("\ntimer %d starting with timeout\n", (int)*timer, (int)timeout);
     struct itimerspec it_val;
     it_val.it_value.tv_sec = timeout;
     it_val.it_value.tv_nsec = 0;
@@ -102,8 +102,10 @@ bool timer_complete(timer_t * timer)
 		exit(EXIT_FAILURE);
 	}
 
-	if(curr_val.it_value.tv_sec == 0)
+	if(curr_val.it_value.tv_sec == 0) {
+		printf("\nTimer %d Ended!\n", (int)*timer);
 		return true;
+	}
 	else
 		return false;
 }
