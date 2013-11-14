@@ -28,12 +28,12 @@ timer_t timer_get()
 
 }
 
-void timer_start(timer_t * timer, time_t timeout)
+void timer_start(timer_t * timer, time_t timeout_s, time_t timeout_ms)
 {
-	printf("\ntimer %d starting with timeout %d\n", (int)*timer, (int)timeout);
+	printf("\ntimer %d starting with timeout %d s\n", (int)*timer, (int)timeout_s);
     struct itimerspec it_val;
-    it_val.it_value.tv_sec = timeout;
-    it_val.it_value.tv_nsec = 0;
+    it_val.it_value.tv_sec = timeout_s;
+    it_val.it_value.tv_nsec = timeout_ms * 1000000; // timeout in miliseconds
 
     // timer expires once
     it_val.it_interval.tv_sec = 0;
@@ -50,11 +50,11 @@ bool timer_complete(timer_t * timer)
 {
 	struct itimerspec curr_val;
 	if(timer_gettime(*timer, &curr_val) == -1) {
-		perror("\nCould not create timer\n");
+		perror("\nCould not get time\n");
 		exit(EXIT_FAILURE);
 	}
 
-	if(curr_val.it_value.tv_sec == 0) {
+	if(curr_val.it_value.tv_nsec == 0 && curr_val.it_value.tv_sec == 0) {
 		printf("\nTimer %d Complete!\n", (int)*timer);
 		return true;
 	}

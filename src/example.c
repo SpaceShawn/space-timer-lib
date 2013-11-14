@@ -20,8 +20,8 @@ timer_t timer_get();
 // Arms or disarms the timer specified by timerid
 // The timer will expire at the given timeout value
 // Entering a timeout of 0 will disarm the timer
-// The function resets the time when it is called to the timeout value
-void timer_start(timer_t * timerid, time_t timeout);
+// The function resets the time when it is called to the timeout value in miliseconds
+void timer_start(timer_t * timerid, time_t timeout_s, time_t timeout_ms);
 
 // Returns true if the timer has expired
 bool timer_complete(timer_t * timer);
@@ -30,30 +30,31 @@ int main(int argc, char* argv[]) {
 
 	timer_t resend_timer = timer_get();
 	timer_t window_timer = timer_get();
-	timer_start(&resend_timer, RESEND_TIMEOUT);
-	timer_start(&window_timer, WINDOW_TIMEOUT);
+	timer_start(&resend_timer, RESEND_TIMEOUT, 200);
+	timer_start(&window_timer, WINDOW_TIMEOUT, 500);
 
 	while(1)
 	{
+	
 		getchar();
-		if(timer_complete(&resend_timer))
+		if(timer_complete(&resend_timer)) 
 			printf("Resend timer complete\n");
 
-		if(timer_complete(&window_timer))
-			printf("Window timer complete\n");
-
-	}
+	  if(timer_complete(&window_timer))
+			printf("window timer complete\n");
+	
+}
 
 
 	return EXIT_SUCCESS;
 }
 
-void timer_start(timer_t * timer, time_t timeout)
+void timer_start(timer_t * timer, time_t timeout_s, time_t timeout_ms)
 {
-	printf("\ntimer %d starting with timeout %d\n", (int)*timer, (int)timeout);
+	printf("\ntimer %d starting with timeout %d s\n", (int)*timer, (int)timeout_s);
     struct itimerspec it_val;
-    it_val.it_value.tv_sec = timeout;
-    it_val.it_value.tv_nsec = 0;
+    it_val.it_value.tv_sec = timeout_s;
+    it_val.it_value.tv_nsec = timeout_ms * 1000000;
 
     // timer expires once
     it_val.it_interval.tv_sec = 0;
@@ -98,11 +99,11 @@ bool timer_complete(timer_t * timer)
 {
 	struct itimerspec curr_val;
 	if(timer_gettime(*timer, &curr_val) == -1) {
-		perror("Could not create timer\n");
+		perror("\nCould not get time\n");
 		exit(EXIT_FAILURE);
 	}
 
-	if(curr_val.it_value.tv_sec == 0) {
+	if(curr_val.it_value.tv_nsec == 0 && curr_val.it_value.tv_sec == 0) {
 		printf("\nTimer %d Ended!\n", (int)*timer);
 		return true;
 	}
