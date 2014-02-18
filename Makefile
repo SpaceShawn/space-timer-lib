@@ -19,6 +19,8 @@ buildQ6:
 	$(MICROCC) $(MICROCFLAGS) $(MICROINCPATH) $(MICROLIBPATH) $(DEBUGFLAGS) -static -c src/timer.c -o lib/timer-mbcc.o
 buildQ6Cpp:
 	$(MICROPP) $(MICROCFLAGS) $(MICROINCPATH) $(MICROLIBPATH) $(DEBUGFLAGS) -static -c src/timer.c -o lib/timer-mbcc.o
+buildBB:
+	$(BEAGLECC) $(MICROFLAGS) $(MICROINCPATH) $(MICROLIBPATH) $(DEBUGFLAGS) -static -c src/timer.c -o lib/timer-BB.o
 #buildAllTests: buildUnitTests
 #buildUnitTests:
 #	$(CC) $(CFLAGS) $(DEBUGFLAGS) $(INCPATH) $(INCTESTPATH) $(LIBPATH) src/*.c tests/unit/*.c -o bin/AllUnitTests $(LIBS)
