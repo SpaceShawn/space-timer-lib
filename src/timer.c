@@ -30,7 +30,7 @@ timer_t timer_get()
 
 void timer_start(timer_t * timer, time_t timeout_s, time_t timeout_ms)
 {
-	printf("\ntimer %d starting with timeout %d s\n", (int)*timer, (int)timeout_s);
+	printf("\ntimer %lx starting with timeout %lx s\n", (long)*timer, (long)timeout_s);
     struct itimerspec it_val;
     it_val.it_value.tv_sec = timeout_s;
     it_val.it_value.tv_nsec = timeout_ms * 1000000; // timeout in miliseconds
@@ -55,7 +55,7 @@ bool timer_complete(timer_t * timer)
 	}
 
 	if(curr_val.it_value.tv_nsec == 0 && curr_val.it_value.tv_sec == 0) {
-		printf("\nTimer %d Complete!\n", (int)*timer);
+		printf("\nTimer %lx Complete!\n", (long)*timer);
 		return true;
 	}
 	else
