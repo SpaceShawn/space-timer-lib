@@ -106,15 +106,8 @@ fi
 
 runtests() {
         if [ $TODEVNULL -ne 0 ]; then
-            echo $FRAMETEST $ARGUMENTS 2>/dev/null
-            $FRAMETEST $ARGUMENTS  2>/dev/null
-            echo $OF2GTEST $ARGUMENTS 2>/dev/null
-            $OF2GTEST $ARGUMENTS  2>/dev/null
-        else
-            echo $FRAMETEST $ARGUMENTS
-            $FRAMETEST $ARGUMENTS 
-            echo $OF2GTEST $ARGUMENTS 
-            $OF2GTEST $ARGUMENTS 
+            echo $TIMERTEST $ARGUMENTS 2>/dev/null
+            $TIMERTEST $ARGUMENTS  2>/dev/null
         fi
 
         if [ $? -ne 0 ]; then
